@@ -1,4 +1,4 @@
-# Cloudflare Pages configuration
+# Cloudflare Pages 部署配置
 name = "angus-portfolio"
 compatibility_date = "2024-01-01"
 
@@ -8,5 +8,5 @@ compatibility_date = "2024-01-01"
   output_dir = "."
   framework = null
 
-# Environment variables (set these in Cloudflare dashboard)
-# CLOUDFLARE_API_TOKEN - not needed for Pages deploy, use wrangler login
+# 自定义域名配置 (部署后在 Cloudflare Dashboard 添加)
+# 域名: aengus.dpdns.org

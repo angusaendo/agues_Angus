@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angus 作品集 | 个人创意展示</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+    
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface2: #1e1e1e;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f5;
+      --text-muted: #888;
+      --accent: #c9a86c;
+      --accent2: #e8d5a3;
+      --gradient1: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --gradient2: linear-gradient(135deg, #c9a86c 0%, #e8d5a3 100%);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html {
+      scroll-behavior: smooth;
+      overflow: hidden;
+    }
+    
+    body {
+      font-family: 'Noto Sans SC', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    /* ===== 导航栏 ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
+    }
+    
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+    
+    .logo span { color: var(--text); }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    
+    /* ===== 幻灯片容器 ===== */
+    .slides-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: scale(0.98);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+    
+    /* ===== 封面页 ===== */
+    .slide-cover {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--gradient1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .slide-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 20%, rgba(201,168,108,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(15,52,96,0.3) 0%, transparent 50%);
+    }
+    
+    .cover-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .cover-eyebrow {
+      font-size: 12px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+    
+    .cover-title {
+      font-size: clamp(48px, 10vw, 120px);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 16px;
+      background: var(--gradient2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .cover-subtitle {
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+    
+    .cover-meta {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .cover-meta-item {
+      text-align: center;
+    }
+    
+    .cover-meta-num {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .cover-meta-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 2px;
+      animation: float 2s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+    
+    .scroll-hint svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--accent);
+    }
+    
+    /* ===== 关于我页 ===== */
+    .slide-about {
+      padding: 120px 48px;
+      background: var(--bg);
+    }
+    
+    .slide-header {
+      margin-bottom: 60px;
+    }
+    
+    .slide-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    
+    .slide-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    
+    .about-text {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+    
+    .about-text strong { color: var(--text); font-weight: 500; }
+    
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    
+    .stat-card {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    
+    .stat-card-num {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* ===== 作品展示页 ===== */
+    .slide-works {
+      padding: 100px 48px 80px;
+      background: var(--bg);
+      overflow-y: auto;
+    }
+    
+    .works-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .works-tab {
+      padding: 10px 24px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .works-tab:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .works-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+    
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .work-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--surface);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .work-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    
+    .work-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .work-card:hover img { transform: scale(1.05); }
+    
+    .work-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .work-card:hover .work-card-overlay { opacity: 1; }
+    
+    .work-card-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .work-card-cat {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+    
+    .work-card-video::after {
+      content: '▶';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(201,168,108,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--bg);
+    }
+    
+    /* ===== 视频页 ===== */
+    .slide-video {
+      padding: 100px 48px;
+      background: var(--bg);
+      justify-content: center;
+    }
+    
+    .video-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    }
+    
+    .video-wrapper video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* ===== 联系页 ===== */
+    .slide-contact {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--gradient1);
+      position: relative;
+    }
+    
+    .slide-contact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,168,108,0.1) 0%, transparent 70%);
+    }
+    
+    .contact-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .contact-title {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    
+    .contact-title span { color: var(--accent); }
+    
+    .contact-text {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 500px;
+    }
+    
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background: var(--accent);
+      color: var(--bg);
+      text-decoration: none;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(201,168,108,0.3);
+    }
+    
+    /* ===== 幻灯片指示器 ===== */
+    .slide-indicators {
+      position: fixed;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .indicator.active {
+      background: var(--accent);
+      height: 24px;
+      border-radius: 4px;
+    }
+    
+    /* ===== 进度条 ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--gradient2);
+      z-index: 200;
+      transition: width 0.3s;
+    }
+    
+    /* ===== 键盘提示 ===== */
+    .key-hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+      z-index: 100;
+    }
+    
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 10px;
+    }
+    
+    /* ===== Lightbox ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    .lightbox.active { display: flex; }
+    
+    .lightbox-content {
+      max-width: 90vw;
+      max-height: 85vh;
+      position: relative;
+    }
+    
+    .lightbox-content img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    
+    .lightbox-content video {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 8px;
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    
+    .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-prev { left: -70px; }
+    .lightbox-next { right: -70px; }
+    
+    .lightbox-info {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .slide-about, .slide-works, .slide-video { padding: 100px 24px 60px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .slide-indicators { right: 20px; }
+      .key-hint { display: none; }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 进度条 -->
+  <div class="progress-bar" id="progressBar"></div>
+  
+  <!-- 导航 -->
+  <nav class="nav">
+    <div class="logo"><img src="logo8.jpg" style="width:32px;height:32px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px">ANGUS<span>PORTFOLIO</span></div>
+    <ul class="nav-links">
+      <li><a onclick="goToSlide(0)" class="nav-link active">首页</a></li>
+      <li><a onclick="goToSlide(1)" class="nav-link">关于</a></li>
+      <li><a onclick="goToSlide(2)" class="nav-link">作品</a></li>
+      <li><a onclick="goToSlide(3)" class="nav-link">视频</a></li>
+      <li><a onclick="goToSlide(4)" class="nav-link">联系</a></li>
+    </ul>
+  </nav>
+  
+  <!-- 幻灯片指示器 -->
+  <div class="slide-indicators" id="indicators"></div>
+  
+  <!-- 键盘提示 -->
+  <div class="key-hint">
+    <span class="key">↑</span><span class="key">↓</span>
+    <span>切换幻灯片</span>
+  </div>
+  
+  <!-- 幻灯片容器 -->
+  <div class="slides-container" id="slidesContainer">
+    
+    <!-- 封面 -->
+    <section class="slide slide-cover active" data-slide="0">
+      <div class="cover-content">
+        <p class="cover-eyebrow">Creative Designer & Visual Artist</p>
+        <h1 class="cover-title">Angus</h1>
+        <p class="cover-subtitle">个人作品集 · 2024</p>
+        <div class="cover-meta">
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">33</div>
+            <div class="cover-meta-label">作品总数</div>
+          </div>
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">4</div>
+            <div class="cover-meta-label">专业领域</div>
+          </div>
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">25</div>
+            <div class="cover-meta-label">电商设计</div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-hint">
+        <span>向下滚动</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </section>
+    
+    <!-- 关于我 -->
+    <section class="slide slide-about" data-slide="1">
+      <div class="slide-header">
+        <p class="slide-label">About Me</p>
+        <h2 class="slide-title">我是 Angus<br/>一名视觉设计师</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>专注<strong>电商平面视觉设计</strong>、<strong>C4D产品建模渲染</strong>、<strong>VI品牌设计</strong>与<strong>AI视频剪辑</strong>，提供从策划到落地的全链路创意支持。</p>
+          <br>
+          <p>擅长将商业需求与艺术表达完美结合，为品牌创造具有视觉冲击力和记忆点的设计方案。</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-card-num">电商设计</div>
+            <div class="stat-card-label">主图/详情页/活动海报</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">C4D建模</div>
+            <div class="stat-card-label">三维渲染/产品展示</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">VI品牌</div>
+            <div class="stat-card-label">标识/视觉规范</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">AI视频</div>
+            <div class="stat-card-label">动态视觉/短视频</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 作品展示 -->
+    <section class="slide slide-works" data-slide="2">
+      <div class="slide-header">
+        <p class="slide-label">Portfolio</p>
+        <h2 class="slide-title">精选作品</h2>
+      </div>
+      <div class="works-tabs">
+        <button class="works-tab active" data-cat="all">全部</button>
+        <button class="works-tab" data-cat="电商设计">电商设计</button>
+        <button class="works-tab" data-cat="C4D建模">C4D建模</button>
+        <button class="works-tab" data-cat="VI品牌">VI品牌</button>
+        <button class="works-tab" data-cat="AI视频">AI视频</button>
+      </div>
+      <div class="works-grid" id="worksGrid"></div>
+    </section>
+    
+    <!-- 视频作品 -->
+    <section class="slide slide-video" data-slide="3">
+      <div class="slide-header" style="text-align:center">
+        <p class="slide-label">Video</p>
+        <h2 class="slide-title">AI视频作品</h2>
+      </div>
+      <div class="video-container">
+        <div class="video-wrapper">
+          <video controls poster="作品/电商作品/0001.jpg">
+            <source src="作品/视频作品/video(6).mp4" type="video/mp4">
+            您的浏览器不支持视频播放
+          </video>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 联系 -->
+    <section class="slide slide-contact" data-slide="4">
+      <div class="contact-content">
+        <p class="slide-label">Contact</p>
+        <h2 class="contact-title">期待与您<br/><span>合作</span></h2>
+        <p class="contact-text">如有设计需求，欢迎通过以下方式联系我，期待与您的合作！</p>
+        <a href="mailto:angus_aendo@163.com" class="contact-btn">
+          ✉ angus_aendo@163.com
+        </a>
+      </div>
+    </section>
+    
+  </div>
+  
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+      <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+      <div id="lightboxMedia"></div>
+      <div class="lightbox-info" id="lightboxInfo"></div>
+    </div>
+  </div>
+
+  <script>
+    // ===== 作品数据 =====
+    const works = [
+      { src: "作品/电商作品/0001.jpg", title: "电商设计-0001", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0010.jpg", title: "电商设计-0010", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0012.jpg", title: "电商设计-0012", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0015.jpg", title: "电商设计-0015", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0021.jpg", title: "电商设计-0021", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0022.jpg", title: "电商设计-0022", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0030.jpg", title: "电商设计-0030", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0044.jpg", title: "电商设计-0044", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0053.jpg", title: "电商设计-0053", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0067.jpg", title: "电商设计-0067", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0068.jpg", title: "电商设计-0068", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0069.jpg", title: "电商设计-0069", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0076.jpg", title: "电商设计-0076", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0077.jpg", title: "电商设计-0077", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0088.jpg", title: "电商设计-0088", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0104.jpg", title: "电商设计-0104", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0121.jpg", title: "电商设计-0121", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0122.jpg", title: "电商设计-0122", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0136.jpg", title: "电商设计-0136", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/0150.jpg", title: "电商设计-0150", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/01de0715598255f513569d9b837403a6_compress.jpg", title: "电商设计-compress", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/图片16.png", title: "电商设计-图片16", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/图片17.png", title: "电商设计-图片17", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/图片20.png", title: "电商设计-图片20", category: "电商设计", type: "image" },
+      { src: "作品/电商作品/图片24.png", title: "电商设计-图片24", category: "电商设计", type: "image" },
+      { src: "作品/建模作品/3.jpg", title: "C4D建模-03", category: "C4D建模", type: "image" },
+      { src: "作品/建模作品/5.jpg", title: "C4D建模-05", category: "C4D建模", type: "image" },
+      { src: "作品/建模作品/plan1.1.jpg", title: "C4D建模-plan1.1", category: "C4D建模", type: "image" },
+      { src: "作品/建模作品/S20海外版蓝色.JPG", title: "C4D建模-S20海外版", category: "C4D建模", type: "image" },
+      { src: "作品/建模作品/S30黑.JPG", title: "C4D建模-S30黑", category: "C4D建模", type: "image" },
+      { src: "作品/建模作品/黑色_Main_0000.JPG", title: "C4D建模-黑色Main", category: "C4D建模", type: "image" },
+      { src: "作品/VI作品/00123.JPG", title: "VI品牌-提案", category: "VI品牌", type: "image" },
+      { src: "作品/视频作品/video(6).mp4", title: "AI视频作品", category: "AI视频", type: "video" }
+    ];
+    
+    // ===== 幻灯片控制 =====
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const indicatorsContainer = document.getElementById('indicators');
+    const progressBar = document.getElementById('progressBar');
+    
+    // 创建指示器
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'indicator' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      indicatorsContainer.appendChild(dot);
+    }
+    
+    function goToSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      
+      // 更新指示器
+      document.querySelectorAll('.indicator').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+      
+      // 更新进度条
+      progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+      
+      // 更新导航高亮
+      document.querySelectorAll('.nav-link').forEach((link, i) => {
+        link.classList.toggle('active', i === currentSlide);
+      });
+      
+      // 如果是视频页，自动播放
+      if (currentSlide === 3) {
+        const video = document.querySelector('.slide-video video');
+        if (video) video.play();
+      } else {
+        const video = document.querySelector('.slide-video video');
+        if (video) video.pause();
+      }
+    }
+    
+    // 键盘控制
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        goToSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goToSlide(currentSlide - 1);
+      }
+    });
+    
+    // 鼠标滚轮
+    let wheelTimeout;
+    document.addEventListener('wheel', (e) => {
+      if (wheelTimeout) return;
+      wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 800);
+      
+      if (e.deltaY > 0) {
+        goToSlide(currentSlide + 1);
+      } else {
+        goToSlide(currentSlide - 1);
+      }
+    }, { passive: true });
+    
+    // 触摸滑动
+    let touchStartY = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+    document.addEventListener('touchend', (e) => {
+      const diff = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToSlide(currentSlide + 1);
+        else goToSlide(currentSlide - 1);
+      }
+    });
+    
+    // ===== 作品筛选与渲染 =====
+    let filteredWorks = [...works];
+    let lightboxIndex = 0;
+    
+    function renderWorks(cat = 'all') {
+      filteredWorks = cat === 'all' ? [...works] : works.filter(w => w.category === cat);
+      const grid = document.getElementById('worksGrid');
+      grid.innerHTML = '';
+      
+      filteredWorks.forEach((work, i) => {
+        const card = document.createElement('div');
+        card.className = 'work-card' + (work.type === 'video' ? ' work-card-video' : '');
+        card.innerHTML = work.type === 'video' 
+          ? '<video src="' + work.src + '" muted preload="metadata"></video>'
+          : '<img src="' + work.src + '" alt="' + work.title + '" loading="lazy">';
+        
+        card.innerHTML += '<div class="work-card-overlay"><div class="work-card-title">' + work.title + '</div><div class="work-card-cat">' + work.category + '</div></div>';
+        
+        card.onclick = () => openLightbox(i);
+        grid.appendChild(card);
+      });
+    }
+    
+    // 筛选按钮
+    document.querySelectorAll('.works-tab').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.works-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderWorks(btn.dataset.cat);
+      };
+    });
+    
+    renderWorks();
+    
+    // ===== Lightbox =====
+    function openLightbox(index) {
+      lightboxIndex = index;
+      updateLightbox();
+      document.getElementById('lightbox').classList.add('active');
+    }
+    
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+    
+    function lightboxNav(dir) {
+      lightboxIndex = (lightboxIndex + dir + filteredWorks.length) % filteredWorks.length;
+      updateLightbox();
+    }
+    
+    function updateLightbox() {
+      const work = filteredWorks[lightboxIndex];
+      const media = document.getElementById('lightboxMedia');
+      const info = document.getElementById('lightboxInfo');
+      
+      if (work.type === 'video') {
+        media.innerHTML = '<video src="' + work.src + '" controls autoplay style="max-width:90vw;max-height:80vh;border-radius:8px"></video>';
+      } else {
+        media.innerHTML = '<img src="' + work.src + '" alt="' + work.title + '" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px">';
+      }
+      info.textContent = (lightboxIndex + 1) + ' / ' + filteredWorks.length + '  |  ' + work.title;
+    }
+    
+    // Lightbox 键盘
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+      if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+    
+    document.getElementById('lightbox').onclick = (e) => {
+      if (e.target.id === 'lightbox') closeLightbox();
+    };
+    
+    // 初始化进度条
+    progressBar.style.width = (100 / totalSlides) + '%';
+  </script>
+</body>
+</html>

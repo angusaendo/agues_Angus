@@ -1,0 +1,12 @@
+# Cloudflare Pages configuration
+name = "angus-portfolio"
+compatibility_date = "2024-01-01"
+
+[[pages]]
+  dir = "."
+  build_command = ""
+  output_dir = "."
+  framework = null
+
+# Environment variables (set these in Cloudflare dashboard)
+# CLOUDFLARE_API_TOKEN - not needed for Pages deploy, use wrangler login

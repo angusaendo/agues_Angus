@@ -1,957 +1,304 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Angus 作品集 | 个人创意展示</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ee">
+  <meta name="description" content="AENDO 的独立文创小店与日常灵感博客。原创手作、随身小物与店主手记。">
+  <title>慢慢集 Slowmade · AENDO 的独立文创小店</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
-    
     :root {
-      --bg: #0a0a0a;
-      --surface: #141414;
-      --surface2: #1e1e1e;
-      --border: rgba(255,255,255,0.08);
-      --text: #f5f5f5;
-      --text-muted: #888;
-      --accent: #c9a86c;
-      --accent2: #e8d5a3;
-      --gradient1: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      --gradient2: linear-gradient(135deg, #c9a86c 0%, #e8d5a3 100%);
-    }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    html {
-      scroll-behavior: smooth;
-      overflow: hidden;
-    }
-    
-    body {
-      font-family: 'Noto Sans SC', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      height: 100vh;
-      overflow: hidden;
-    }
-    
-    /* ===== 导航栏 ===== */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 48px;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
-    }
-    
-    .logo {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--accent);
-    }
-    
-    .logo span { color: var(--text); }
-    
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-    
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      transition: color 0.3s;
-      cursor: pointer;
-    }
-    
-    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-    
-    /* ===== 幻灯片容器 ===== */
-    .slides-container {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-    }
-    
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      transform: scale(0.98);
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-      transform: scale(1);
-    }
-    
-    /* ===== 封面页 ===== */
-    .slide-cover {
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: var(--gradient1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .slide-cover::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 30% 20%, rgba(201,168,108,0.15) 0%, transparent 50%),
-                  radial-gradient(ellipse at 70% 80%, rgba(15,52,96,0.3) 0%, transparent 50%);
-    }
-    
-    .cover-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .cover-eyebrow {
-      font-size: 12px;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-    }
-    
-    .cover-title {
-      font-size: clamp(48px, 10vw, 120px);
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 16px;
-      background: var(--gradient2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .cover-subtitle {
-      font-size: clamp(18px, 3vw, 28px);
-      font-weight: 300;
-      color: var(--text-muted);
-      margin-bottom: 48px;
-    }
-    
-    .cover-meta {
-      display: flex;
-      gap: 48px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    
-    .cover-meta-item {
-      text-align: center;
-    }
-    
-    .cover-meta-num {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-    
-    .cover-meta-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    
-    .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: 12px;
-      letter-spacing: 2px;
-      animation: float 2s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
-    
-    .scroll-hint svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--accent);
-    }
-    
-    /* ===== 关于我页 ===== */
-    .slide-about {
-      padding: 120px 48px;
-      background: var(--bg);
-    }
-    
-    .slide-header {
-      margin-bottom: 60px;
-    }
-    
-    .slide-label {
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-    
-    .slide-title {
-      font-size: clamp(32px, 5vw, 56px);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-    
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-    
-    .about-text {
-      font-size: 18px;
-      line-height: 1.8;
-      color: var(--text-muted);
-    }
-    
-    .about-text strong { color: var(--text); font-weight: 500; }
-    
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    
-    .stat-card {
-      padding: 28px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-    
-    .stat-card-num {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-    
-    .stat-card-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    
-    /* ===== 作品展示页 ===== */
-    .slide-works {
-      padding: 100px 48px 80px;
-      background: var(--bg);
-      overflow-y: auto;
-    }
-    
-    .works-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-    }
-    
-    .works-tab {
-      padding: 10px 24px;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 14px;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .works-tab:hover { border-color: var(--accent); color: var(--accent); }
-    
-    .works-tab.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--bg);
-    }
-    
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    
-    .work-card {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: var(--surface);
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .work-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-    
-    .work-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s;
-    }
-    
-    .work-card:hover img { transform: scale(1.05); }
-    
-    .work-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .work-card:hover .work-card-overlay { opacity: 1; }
-    
-    .work-card-title {
-      font-size: 14px;
-      font-weight: 500;
-    }
-    
-    .work-card-cat {
-      font-size: 12px;
-      color: var(--accent);
-      margin-top: 4px;
-    }
-    
-    .work-card-video::after {
-      content: '▶';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background: rgba(201,168,108,0.9);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: var(--bg);
-    }
-    
-    /* ===== 视频页 ===== */
-    .slide-video {
-      padding: 100px 48px;
-      background: var(--bg);
-      justify-content: center;
-    }
-    
-    .video-container {
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--surface);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-    }
-    
-    .video-wrapper video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* ===== 联系页 ===== */
-    .slide-contact {
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: var(--gradient1);
-      position: relative;
-    }
-    
-    .slide-contact::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(201,168,108,0.1) 0%, transparent 70%);
-    }
-    
-    .contact-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .contact-title {
-      font-size: clamp(36px, 6vw, 72px);
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-    
-    .contact-title span { color: var(--accent); }
-    
-    .contact-text {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 500px;
-    }
-    
-    .contact-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 40px;
-      background: var(--accent);
-      color: var(--bg);
-      text-decoration: none;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 16px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .contact-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(201,168,108,0.3);
-    }
-    
-    /* ===== 幻灯片指示器 ===== */
-    .slide-indicators {
-      position: fixed;
-      right: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .indicator.active {
-      background: var(--accent);
-      height: 24px;
-      border-radius: 4px;
-    }
-    
-    /* ===== 进度条 ===== */
-    .progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 2px;
-      background: var(--gradient2);
-      z-index: 200;
-      transition: width 0.3s;
-    }
-    
-    /* ===== 键盘提示 ===== */
-    .key-hint {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: var(--text-muted);
-      font-size: 12px;
-      z-index: 100;
-    }
-    
-    .key {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 10px;
-    }
-    
-    /* ===== Lightbox ===== */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 300;
-      background: rgba(0,0,0,0.95);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
-    
-    .lightbox.active { display: flex; }
-    
-    .lightbox-content {
-      max-width: 90vw;
-      max-height: 85vh;
-      position: relative;
-    }
-    
-    .lightbox-content img {
-      max-width: 90vw;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    
-    .lightbox-content video {
-      max-width: 90vw;
-      max-height: 85vh;
-      border-radius: 8px;
-    }
-    
-    .lightbox-close {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
-    
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: white;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s;
-    }
-    
-    .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
-    .lightbox-prev { left: -70px; }
-    .lightbox-next { right: -70px; }
-    
-    .lightbox-info {
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    
-    /* ===== 响应式 ===== */
-    @media (max-width: 768px) {
-      .nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .slide-about, .slide-works, .slide-video { padding: 100px 24px 60px; }
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
-      .works-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .slide-indicators { right: 20px; }
-      .key-hint { display: none; }
-      .lightbox-prev { left: 10px; }
-      .lightbox-next { right: 10px; }
-    }
+      --paper: #f7f5ee;
+      --paper-deep: #eeece2;
+      --ink: #26302b;
+      --muted: #727a70;
+      --sage: #657963;
+      --sage-dark: #425b48;
+      --clay: #bd7158;
+      --line: rgba(38,48,43,.14);
+      --serif: "Noto Serif SC", "Songti SC", "STSong", serif;
+      --sans: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    button, a { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; }
+    img { display: block; width: 100%; }
+    .preview-bar { padding: 9px 18px; text-align: center; background: #435846; color: #f8f5eb; font-size: 11px; letter-spacing: .08em; }
+    .header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; height: 76px; padding: 0 clamp(20px, 6vw, 88px); background: rgba(247,245,238,.94); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--sage); border-radius: 50%; color: var(--sage-dark); font-family: var(--serif); font-size: 20px; font-style: italic; }
+    .brand-copy { display: grid; gap: 1px; }
+    .brand-copy strong { font-family: var(--serif); font-size: 16px; font-weight: 600; letter-spacing: .05em; }
+    .brand-copy span { color: var(--muted); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: clamp(20px, 3.4vw, 48px); color: #515b52; font-size: 13px; }
+    .nav a { transition: color .2s; }
+    .nav a:hover { color: var(--clay); }
+    .header-tools { display: flex; align-items: center; gap: 13px; }
+    .cart-button { position: relative; display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; cursor: pointer; font-size: 12px; }
+    .cart-count { display: grid; min-width: 19px; height: 19px; place-items: center; padding: 0 5px; border-radius: 50%; background: var(--sage-dark); color: white; font-size: 10px; }
+    .menu-button { display: none; border: 0; background: none; font-size: 24px; cursor: pointer; }
+    .hero { display: grid; min-height: 580px; grid-template-columns: .82fr 1.18fr; align-items: center; gap: clamp(25px, 6vw, 88px); padding: 42px clamp(20px, 7.2vw, 112px) 58px; }
+    .hero-copy { position: relative; z-index: 1; max-width: 470px; }
+    .eyebrow { display: flex; align-items: center; gap: 11px; margin: 0 0 20px; color: var(--sage-dark); font-size: 10px; font-weight: 600; letter-spacing: .19em; text-transform: uppercase; }
+    .eyebrow::before { width: 30px; height: 1px; background: var(--clay); content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 { margin: 0; font-family: var(--serif); font-size: clamp(34px, 3.4vw, 47px); font-weight: 500; letter-spacing: .04em; line-height: 1.2; }
+    .hero h1 em { color: var(--sage-dark); font-weight: 500; }
+    .hero-lede { max-width: 380px; margin: 23px 0 27px; color: #657067; font-family: var(--serif); font-size: 15px; letter-spacing: .03em; line-height: 2; }
+    .hero-actions { display: flex; align-items: center; gap: 22px; }
+    .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 11px; padding: 0 21px; border: 1px solid var(--sage-dark); border-radius: 999px; background: var(--sage-dark); color: #fffdf6; cursor: pointer; font-size: 12px; transition: transform .2s, background .2s; }
+    .button:hover { transform: translateY(-2px); background: #34473a; }
+    .text-link { color: var(--sage-dark); font-size: 12px; }
+    .hero-note { margin-top: 25px; color: #888c7f; font-size: 10px; }
+    .hero-visual { position: relative; }
+    .hero-visual img { height: clamp(350px, 40vw, 520px); border-radius: 48% 48% 4px 4px; object-fit: cover; object-position: 62% 50%; }
+    .hero-caption { position: absolute; right: 15px; bottom: 16px; padding: 9px 13px; background: rgba(247,245,238,.9); color: var(--sage-dark); font-family: var(--serif); font-size: 10px; letter-spacing: .1em; }
+    .seal { position: absolute; top: 15%; left: -34px; display: grid; width: 86px; height: 86px; place-items: center; border: 1px solid rgba(66,91,72,.5); border-radius: 50%; background: var(--paper); color: var(--sage-dark); font-family: var(--serif); font-size: 12px; line-height: 1.7; text-align: center; transform: rotate(-11deg); }
+    .values { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; padding: 19px clamp(20px, 10vw, 152px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; }
+    .values span { color: #5e695e; font-family: var(--serif); font-size: 12px; letter-spacing: .08em; }
+    .values span + span { border-left: 1px solid var(--line); }
+    .section { padding: 95px clamp(20px, 7.2vw, 112px); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 34px; }
+    .section-head .eyebrow { margin-bottom: 12px; }
+    .section-title { margin: 0; font-family: var(--serif); font-size: clamp(30px, 4vw, 47px); font-weight: 500; letter-spacing: .04em; }
+    .section-subtitle { max-width: 390px; margin: 0 0 4px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+    .category-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 23px; }
+    .category-chip { padding: 8px 15px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: #687269; cursor: pointer; font-size: 11px; }
+    .category-chip.active, .category-chip:hover { border-color: var(--sage-dark); background: var(--sage-dark); color: white; }
+    .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(13px, 2.5vw, 32px); }
+    .product-card { min-width: 0; }
+    .product-image { position: relative; overflow: hidden; aspect-ratio: .91; background: var(--paper-deep); }
+    .product-image img { height: 100%; object-fit: cover; transition: transform .5s; }
+    .product-card:hover .product-image img { transform: scale(1.035); }
+    .product-tag { position: absolute; top: 12px; left: 12px; padding: 6px 9px; background: rgba(247,245,238,.94); color: var(--sage-dark); font-size: 9px; letter-spacing: .07em; }
+    .add-button { position: absolute; right: 12px; bottom: 12px; display: grid; width: 39px; height: 39px; place-items: center; border: 0; border-radius: 50%; background: var(--paper); color: var(--sage-dark); cursor: pointer; font-size: 21px; box-shadow: 0 4px 15px #26302b1c; }
+    .add-button:hover { background: var(--sage-dark); color: white; }
+    .product-info { display: flex; justify-content: space-between; gap: 10px; padding-top: 15px; }
+    .product-info h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 16px; font-weight: 500; }
+    .product-info p { margin: 0; color: #7a8178; font-size: 10px; }
+    .price { flex: none; padding-top: 1px; color: var(--sage-dark); font-family: var(--serif); font-size: 14px; }
+    .price small { display: block; margin-top: 3px; color: #9a796d; font-family: var(--sans); font-size: 9px; text-align: right; }
+    .shop-footnote { margin: 22px 0 0; color: #858b80; font-size: 10px; line-height: 1.8; }
+    .journal-section { background: #eeece3; }
+    .journal-grid { display: grid; grid-template-columns: 1.2fr .8fr .8fr; gap: 20px; }
+    .article-card { display: flex; min-height: 305px; flex-direction: column; background: var(--paper); cursor: pointer; }
+    .article-card:focus-visible { outline: 2px solid var(--sage-dark); outline-offset: 3px; }
+    .article-image { overflow: hidden; height: 190px; background: var(--paper-deep); }
+    .article-image img { height: 100%; object-fit: cover; transition: transform .5s; }
+    .article-card:hover img { transform: scale(1.035); }
+    .article-copy { padding: 18px 18px 19px; }
+    .article-meta { margin-bottom: 8px; color: var(--sage); font-size: 9px; letter-spacing: .08em; }
+    .article-copy h3 { margin: 0 0 8px; font-family: var(--serif); font-size: 17px; font-weight: 500; line-height: 1.6; }
+    .article-copy p { margin: 0; color: #737b72; font-size: 11px; line-height: 1.8; }
+    .about-section { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(28px, 8vw, 120px); align-items: center; }
+    .about-stamp { display: grid; width: min(100%,320px); aspect-ratio: 1; place-items: center; border: 1px solid #889384; border-radius: 50%; color: var(--sage-dark); font-family: var(--serif); text-align: center; }
+    .about-stamp div { font-size: 15px; letter-spacing: .14em; line-height: 2; }
+    .about-stamp strong { display: block; margin: 8px; font-size: 48px; font-style: italic; font-weight: 500; }
+    .about-copy h2 { margin: 0 0 18px; font-family: var(--serif); font-size: clamp(30px,4vw,46px); font-weight: 500; line-height: 1.4; }
+    .about-copy p { max-width: 520px; color: #667067; font-size: 13px; line-height: 2.1; }
+    .about-copy .text-link { display: inline-block; margin-top: 10px; }
+    .footer { padding: 29px clamp(20px, 7.2vw, 112px); border-top: 1px solid var(--line); color: #687168; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .footer small { font-size: 10px; }
+    .footer-links { display: flex; gap: 19px; font-size: 11px; }
+    .footer-note { margin: 16px 0 0; color: #92958a; font-size: 9px; }
+    .overlay { position: fixed; inset: 0; z-index: 40; visibility: hidden; background: rgba(24,31,27,.38); opacity: 0; transition: opacity .22s, visibility .22s; }
+    .overlay.open { visibility: visible; opacity: 1; }
+    .cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 41; display: flex; width: min(440px,100vw); flex-direction: column; padding: 25px; background: var(--paper); box-shadow: -12px 0 40px #1218131a; transform: translateX(102%); transition: transform .27s ease; }
+    .cart-drawer.open { transform: translateX(0); }
+    .drawer-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .drawer-head h2 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 500; }
+    .close-button { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; background: none; cursor: pointer; font-size: 19px; }
+    .cart-items { overflow: auto; flex: 1; padding: 10px 0; }
+    .empty-cart { padding: 45px 5px; color: var(--muted); font-family: var(--serif); font-size: 15px; text-align: center; }
+    .cart-item { display: grid; grid-template-columns: 70px 1fr auto; gap: 13px; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .cart-item img { width: 70px; height: 78px; object-fit: cover; }
+    .cart-item h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 13px; font-weight: 500; }
+    .cart-item small { color: #8a8e83; font-size: 9px; }
+    .qty { display: flex; align-items: center; gap: 10px; margin-top: 9px; }
+    .qty button { width: 24px; height: 24px; border: 1px solid var(--line); border-radius: 50%; background: none; cursor: pointer; }
+    .remove-item { align-self: start; border: 0; background: none; color: #8a8e83; cursor: pointer; font-size: 17px; }
+    .cart-summary { padding-top: 16px; border-top: 1px solid var(--line); }
+    .summary-line { display: flex; justify-content: space-between; margin-bottom: 13px; font-family: var(--serif); font-size: 16px; }
+    .payment-title { margin: 18px 0 8px; color: #717970; font-size: 10px; }
+    .payment-options { display: flex; gap: 8px; }
+    .payment-option { flex: 1; padding: 10px 8px; border: 1px solid var(--line); background: #f0eee6; color: #758076; font-size: 11px; text-align: center; }
+    .payment-option::after { display: block; margin-top: 4px; color: #9a796d; content: "接入中"; font-size: 9px; }
+    .pay-button { width: 100%; margin-top: 14px; opacity: .62; cursor: not-allowed; }
+    .cart-disclaimer { margin: 12px 0 0; color: #8c9086; font-size: 9px; line-height: 1.8; }
+    .toast { position: fixed; right: 24px; bottom: 24px; z-index: 60; padding: 12px 17px; background: var(--ink); color: white; font-size: 12px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .article-modal { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; padding: 20px; background: #2027209c; }
+    .article-modal.open { display: grid; }
+    .article-dialog { position: relative; width: min(590px,100%); max-height: 85vh; overflow: auto; padding: clamp(24px,5vw,48px); background: var(--paper); }
+    .article-dialog .close-button { position: absolute; top: 16px; right: 16px; }
+    .article-dialog .eyebrow { margin: 0 0 14px; }
+    .article-dialog h2 { margin: 0 0 17px; font-family: var(--serif); font-size: 29px; font-weight: 500; line-height: 1.5; }
+    .article-dialog p { color: #59655c; font-size: 13px; line-height: 2.1; }
+    @media (max-width: 780px) {
+      .header { height: 67px; }
+      .menu-button { display: inline-grid; place-items: center; }
+      .nav { position: absolute; top: 66px; right: 0; left: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 14px; border-bottom: 1px solid var(--line); background: var(--paper); }
+      .nav.open { display: flex; }
+      .nav a { padding: 12px 3px; }
+      .cart-button { gap: 6px; padding: 9px 11px; font-size: 11px; }
+      .hero { min-height: auto; grid-template-columns: 1fr; gap: 29px; padding-top: 55px; }
+      .hero-visual { order: -1; }
+      .hero-visual img { height: min(65vw,390px); border-radius: 48% 48% 3px 3px; }
+      .hero-copy { max-width: 560px; }
+      .hero h1 { font-size: clamp(31px,8.5vw,43px); }
+      .seal { left: -7px; width: 69px; height: 69px; font-size: 10px; }
+      .values { padding-right: 15px; padding-left: 15px; }
+      .values span { font-size: 10px; }
+      .section { padding-top: 70px; padding-bottom: 70px; }
+      .section-head { align-items: start; flex-direction: column; gap: 11px; }
+      .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 26px 14px; }
+      .product-grid .product-card:last-child { grid-column: 1 / -1; width: calc(50% - 7px); }
+      .journal-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+      .article-card:first-child { grid-column: 1 / -1; }
+      .article-card { min-height: 0; }
+      .article-image { height: 150px; }
+      .article-card:first-child .article-image { height: 210px; }
+      .article-copy { padding: 14px; }
+      .about-section { grid-template-columns: 1fr; gap: 30px; }
+      .about-stamp { width: 215px; }
+      .about-stamp strong { font-size: 36px; }
+      .footer-top { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .brand-copy strong { font-size: 14px; }
+      .brand-mark { width: 32px; height: 32px; }
+      .hero-actions { gap: 14px; }
+      .button { padding: 0 16px; }
+      .product-info { flex-direction: column; }
+      .price small { display: inline; margin-left: 4px; }
+      .footer-links { gap: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
-  <!-- 进度条 -->
-  <div class="progress-bar" id="progressBar"></div>
-  
-  <!-- 导航 -->
-  <nav class="nav">
-    <div class="logo"><img src="logo8.jpg" style="width:32px;height:32px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px">ANGUS<span>PORTFOLIO</span></div>
-    <ul class="nav-links">
-      <li><a onclick="goToSlide(0)" class="nav-link active">首页</a></li>
-      <li><a onclick="goToSlide(1)" class="nav-link">关于</a></li>
-      <li><a onclick="goToSlide(2)" class="nav-link">作品</a></li>
-      <li><a onclick="goToSlide(3)" class="nav-link">视频</a></li>
-      <li><a onclick="goToSlide(4)" class="nav-link">联系</a></li>
-    </ul>
-  </nav>
-  
-  <!-- 幻灯片指示器 -->
-  <div class="slide-indicators" id="indicators"></div>
-  
-  <!-- 键盘提示 -->
-  <div class="key-hint">
-    <span class="key">↑</span><span class="key">↓</span>
-    <span>切换幻灯片</span>
-  </div>
-  
-  <!-- 幻灯片容器 -->
-  <div class="slides-container" id="slidesContainer">
-    
-    <!-- 封面 -->
-    <section class="slide slide-cover active" data-slide="0">
-      <div class="cover-content">
-        <p class="cover-eyebrow">Creative Designer & Visual Artist</p>
-        <h1 class="cover-title">Angus</h1>
-        <p class="cover-subtitle">个人作品集 · 2024</p>
-        <div class="cover-meta">
-          <div class="cover-meta-item">
-            <div class="cover-meta-num">33</div>
-            <div class="cover-meta-label">作品总数</div>
-          </div>
-          <div class="cover-meta-item">
-            <div class="cover-meta-num">4</div>
-            <div class="cover-meta-label">专业领域</div>
-          </div>
-          <div class="cover-meta-item">
-            <div class="cover-meta-num">25</div>
-            <div class="cover-meta-label">电商设计</div>
-          </div>
-        </div>
-      </div>
-      <div class="scroll-hint">
-        <span>向下滚动</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12l7 7 7-7"/>
-        </svg>
-      </div>
-    </section>
-    
-    <!-- 关于我 -->
-    <section class="slide slide-about" data-slide="1">
-      <div class="slide-header">
-        <p class="slide-label">About Me</p>
-        <h2 class="slide-title">我是 Angus<br/>一名视觉设计师</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-text">
-          <p>专注<strong>电商平面视觉设计</strong>、<strong>C4D产品建模渲染</strong>、<strong>VI品牌设计</strong>与<strong>AI视频剪辑</strong>，提供从策划到落地的全链路创意支持。</p>
-          <br>
-          <p>擅长将商业需求与艺术表达完美结合，为品牌创造具有视觉冲击力和记忆点的设计方案。</p>
-        </div>
-        <div class="about-stats">
-          <div class="stat-card">
-            <div class="stat-card-num">电商设计</div>
-            <div class="stat-card-label">主图/详情页/活动海报</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num">C4D建模</div>
-            <div class="stat-card-label">三维渲染/产品展示</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num">VI品牌</div>
-            <div class="stat-card-label">标识/视觉规范</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num">AI视频</div>
-            <div class="stat-card-label">动态视觉/短视频</div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- 作品展示 -->
-    <section class="slide slide-works" data-slide="2">
-      <div class="slide-header">
-        <p class="slide-label">Portfolio</p>
-        <h2 class="slide-title">精选作品</h2>
-      </div>
-      <div class="works-tabs">
-        <button class="works-tab active" data-cat="all">全部</button>
-        <button class="works-tab" data-cat="电商设计">电商设计</button>
-        <button class="works-tab" data-cat="C4D建模">C4D建模</button>
-        <button class="works-tab" data-cat="VI品牌">VI品牌</button>
-        <button class="works-tab" data-cat="AI视频">AI视频</button>
-      </div>
-      <div class="works-grid" id="worksGrid"></div>
-    </section>
-    
-    <!-- 视频作品 -->
-    <section class="slide slide-video" data-slide="3">
-      <div class="slide-header" style="text-align:center">
-        <p class="slide-label">Video</p>
-        <h2 class="slide-title">AI视频作品</h2>
-      </div>
-      <div class="video-container">
-        <div class="video-wrapper">
-          <video controls poster="作品/电商作品/0001.jpg">
-            <source src="作品/视频作品/video(6).mp4" type="video/mp4">
-            您的浏览器不支持视频播放
-          </video>
-        </div>
-      </div>
-    </section>
-    
-    <!-- 联系 -->
-    <section class="slide slide-contact" data-slide="4">
-      <div class="contact-content">
-        <p class="slide-label">Contact</p>
-        <h2 class="contact-title">期待与您<br/><span>合作</span></h2>
-        <p class="contact-text">如有设计需求，欢迎通过以下方式联系我，期待与您的合作！</p>
-        <a href="mailto:angus_aendo@163.com" class="contact-btn">
-          ✉ angus_aendo@163.com
-        </a>
-      </div>
-    </section>
-    
-  </div>
-  
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <div class="lightbox-content">
-      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-      <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
-      <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
-      <div id="lightboxMedia"></div>
-      <div class="lightbox-info" id="lightboxInfo"></div>
+  <div class="preview-bar">设计预览 · 商品款式、图片与价格均为示意内容，待替换为实际上架信息</div>
+  <header class="header">
+    <a class="brand" href="#top" aria-label="慢慢集首页">
+      <span class="brand-mark">慢</span>
+      <span class="brand-copy"><strong>慢慢集</strong><span>AENDO · Slowmade Studio</span></span>
+    </a>
+    <nav class="nav" id="site-nav" aria-label="网站导航">
+      <a href="#shop">逛小店</a><a href="#journal">灵感手记</a><a href="#about">关于 AENDO</a>
+    </nav>
+    <div class="header-tools">
+      <button class="cart-button" id="open-cart" type="button" aria-label="打开购物车">购物袋 <span class="cart-count" id="cart-count">0</span></button>
+      <button class="menu-button" id="menu-button" type="button" aria-label="打开导航菜单" aria-expanded="false">☰</button>
     </div>
-  </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A little shop for lovely things</p>
+        <h1>把喜欢的日常，做成<br><em>可以带走的小东西。</em></h1>
+        <p class="hero-lede">把柔软的毛线编成随身小物，让一点俏皮和绿意，陪你去更多地方。</p>
+        <div class="hero-actions"><a class="button" href="#shop">看看钩织小物 <span aria-hidden="true">↗</span></a><a class="text-link" href="#journal">读一篇手记&nbsp; →</a></div>
+        <p class="hero-note">手作钩织 · 原创设计 · 为日常添一点喜欢</p>
+      </div>
+      <div class="hero-visual"><span class="seal">为日常<br>留一点<br>柔软</span><img src="assets/product-slippers.jpg" alt="红白、蓝黄与灰白配色的手作钩织小拖鞋挂件" fetchpriority="high"><span class="hero-caption">慢慢钩，好好带着。　No. 01</span></div>
+    </section>
+      <div class="values" aria-label="小店理念"><span>为日常而设计</span><span>一针一线的手作感</span><span>慢一点，也很好</span></div>
+
+    <section class="section" id="shop">
+      <div class="section-head"><div><p class="eyebrow">The little shop</p><h2 class="section-title">最近在做的小物</h2></div><p class="section-subtitle">从纸品到随身日常，每件小物都先从一张草图开始。点击加号，可以试试购物袋。</p></div>
+      <div class="category-row" aria-label="商品分类"><button class="category-chip active" type="button">全部小物</button><button class="category-chip" type="button">钩织挂件</button><button class="category-chip" type="button">发饰小物</button></div>
+      <div class="product-grid">
+        <article class="product-card" data-product="slipper"><div class="product-image"><img src="assets/product-slippers.jpg" alt="红白、蓝黄与灰白配色的手作钩织小拖鞋挂件" loading="lazy"><span class="product-tag">手作钩织 · 多色</span><button class="add-button" type="button" aria-label="把钩织小拖鞋挂件加入购物袋" data-add="slipper">+</button></div><div class="product-info"><div><h3>小拖鞋 · 钩织挂件</h3><p>四种撞色搭配，把夏日穿在包包上</p></div><span class="price">价格待定<small>上架前确认</small></span></div></article>
+        <article class="product-card" data-product="starfish"><div class="product-image"><img src="assets/product-starfish.jpg" alt="奶油黄与橘黄色手作钩织海星橡皮筋" loading="lazy"><span class="product-tag">手作钩织 · 发饰</span><button class="add-button" type="button" aria-label="把海星钩织橡皮筋加入购物袋" data-add="starfish">+</button></div><div class="product-info"><div><h3>海星 · 钩织橡皮筋</h3><p>暖暖的海星配色，给发尾一点俏皮</p></div><span class="price">价格待定<small>上架前确认</small></span></div></article>
+        <article class="product-card" data-product="monstera"><div class="product-image"><img src="assets/product-monstera.jpg" alt="灰绿色手作钩织龟背竹叶片挂件" loading="lazy"><span class="product-tag">手作钩织 · 植物</span><button class="add-button" type="button" aria-label="把龟背竹钩织挂件加入购物袋" data-add="monstera">+</button></div><div class="product-info"><div><h3>龟背竹 · 钩织挂件</h3><p>把一片绿意，挂在随身的小角落</p></div><span class="price">价格待定<small>上架前确认</small></span></div></article>
+      </div>
+      <p class="shop-footnote">以上为你提供的手作商品实拍图；价格、库存及发货信息待确认。可先把喜欢的款式加入购物袋，付款功能将在确认商品信息后接入微信支付或支付宝。</p>
+    </section>
+
+    <section class="section journal-section" id="journal">
+      <div class="section-head"><div><p class="eyebrow">Notes from the studio</p><h2 class="section-title">灵感手记</h2></div><p class="section-subtitle">记录钩织配色、日常灵感和把喜欢的小东西慢慢做出来的过程。</p></div>
+      <div class="journal-grid">
+        <article class="article-card" data-article="0" tabindex="0" role="button" aria-label="阅读：给小拖鞋挑一组撞色"><div class="article-image"><img src="assets/product-slippers.jpg" alt="不同颜色搭配的钩织小拖鞋挂件" loading="lazy"></div><div class="article-copy"><div class="article-meta">配色灵感 · 手作日常</div><h3>给小拖鞋挑一组撞色</h3><p>红白、蓝黄，和安静的灰白色，每一双都有自己的小脾气。</p></div></article>
+        <article class="article-card" data-article="1" tabindex="0" role="button" aria-label="阅读：把一颗小海星戴在发间"><div class="article-image"><img src="assets/product-starfish.jpg" alt="奶油黄与橘黄色的钩织海星橡皮筋" loading="lazy"></div><div class="article-copy"><div class="article-meta">灵感小物 · 发间点缀</div><h3>把一颗小海星戴在发间</h3><p>把海边的想象，编成一个轻松又明亮的小点缀。</p></div></article>
+        <article class="article-card" data-article="2" tabindex="0" role="button" aria-label="阅读：让一片龟背竹陪你出门"><div class="article-image"><img src="assets/product-monstera.jpg" alt="灰绿色手作钩织龟背竹挂件" loading="lazy"></div><div class="article-copy"><div class="article-meta">植物灵感 · 随身挂件</div><h3>让一片龟背竹陪你出门</h3><p>灰绿色的叶片造型，把一点安静的植物感带在身边。</p></div></article>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="about-stamp" aria-hidden="true"><div>made slowly<br><strong>AENDO</strong>小小设计工作室</div></div>
+      <div class="about-copy"><p class="eyebrow">A note from AENDO</p><h2>你好，这里是<br>慢慢集。</h2><p>我是 AENDO，喜欢把日常里不起眼的小画面，编织成可以挂在身边、戴在发间，也可以送给喜欢之人的手作小物。这间小店还在慢慢长大，欢迎常来看看。</p><a class="text-link" href="#shop">回到小店&nbsp; →</a></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="footer-top"><a class="brand" href="#top"><span class="brand-mark">慢</span><span class="brand-copy"><strong>慢慢集</strong><span>AENDO · Slowmade Studio</span></span></a><div class="footer-links"><a href="#shop">逛小店</a><a href="#journal">灵感手记</a><a href="#about">关于</a></div><small>© 2026 慢慢集 · 为日常留一点喜欢</small></div><p class="footer-note">商品实拍预览 · 商品价格、库存和发货信息待确认；博客文章为示意内容。</p></footer>
+
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="购物袋" aria-modal="true" role="dialog" aria-hidden="true">
+    <div class="drawer-head"><h2>你的购物袋</h2><button class="close-button" id="close-cart" type="button" aria-label="关闭购物袋">×</button></div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-summary"><div class="summary-line"><span>商品金额</span><strong id="cart-total">待确认</strong></div><p class="payment-title">计划支持的付款方式</p><div class="payment-options"><div class="payment-option">微信支付</div><div class="payment-option">支付宝</div></div><button class="button pay-button" type="button" disabled>确认价格后开放支付</button><p class="cart-disclaimer">购物袋仅保存在当前浏览器中。商品价格尚未确认，微信支付和支付宝暂未接入，不会发起付款。</p></div>
+  </aside>
+  <div class="article-modal" id="article-modal" role="presentation"><article class="article-dialog" role="dialog" aria-modal="true" aria-labelledby="article-title"><button class="close-button" id="close-article" type="button" aria-label="关闭文章">×</button><p class="eyebrow">AENDO 的工作室笔记 · 灵感记录</p><h2 id="article-title"></h2><div id="article-body"></div></article></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // ===== 作品数据 =====
-    const works = [
-      { src: "作品/电商作品/0001.jpg", title: "电商设计-0001", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0010.jpg", title: "电商设计-0010", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0012.jpg", title: "电商设计-0012", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0015.jpg", title: "电商设计-0015", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0021.jpg", title: "电商设计-0021", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0022.jpg", title: "电商设计-0022", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0030.jpg", title: "电商设计-0030", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0044.jpg", title: "电商设计-0044", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0053.jpg", title: "电商设计-0053", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0067.jpg", title: "电商设计-0067", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0068.jpg", title: "电商设计-0068", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0069.jpg", title: "电商设计-0069", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0076.jpg", title: "电商设计-0076", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0077.jpg", title: "电商设计-0077", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0088.jpg", title: "电商设计-0088", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0104.jpg", title: "电商设计-0104", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0121.jpg", title: "电商设计-0121", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0122.jpg", title: "电商设计-0122", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0136.jpg", title: "电商设计-0136", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/0150.jpg", title: "电商设计-0150", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/01de0715598255f513569d9b837403a6_compress.jpg", title: "电商设计-compress", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/图片16.png", title: "电商设计-图片16", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/图片17.png", title: "电商设计-图片17", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/图片20.png", title: "电商设计-图片20", category: "电商设计", type: "image" },
-      { src: "作品/电商作品/图片24.png", title: "电商设计-图片24", category: "电商设计", type: "image" },
-      { src: "作品/建模作品/3.jpg", title: "C4D建模-03", category: "C4D建模", type: "image" },
-      { src: "作品/建模作品/5.jpg", title: "C4D建模-05", category: "C4D建模", type: "image" },
-      { src: "作品/建模作品/plan1.1.jpg", title: "C4D建模-plan1.1", category: "C4D建模", type: "image" },
-      { src: "作品/建模作品/S20海外版蓝色.JPG", title: "C4D建模-S20海外版", category: "C4D建模", type: "image" },
-      { src: "作品/建模作品/S30黑.JPG", title: "C4D建模-S30黑", category: "C4D建模", type: "image" },
-      { src: "作品/建模作品/黑色_Main_0000.JPG", title: "C4D建模-黑色Main", category: "C4D建模", type: "image" },
-      { src: "作品/VI作品/00123.JPG", title: "VI品牌-提案", category: "VI品牌", type: "image" },
-      { src: "作品/视频作品/video(6).mp4", title: "AI视频作品", category: "AI视频", type: "video" }
-    ];
-    
-    // ===== 幻灯片控制 =====
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    const indicatorsContainer = document.getElementById('indicators');
-    const progressBar = document.getElementById('progressBar');
-    
-    // 创建指示器
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'indicator' + (i === 0 ? ' active' : '');
-      dot.onclick = () => goToSlide(i);
-      indicatorsContainer.appendChild(dot);
-    }
-    
-    function goToSlide(index) {
-      if (index < 0) index = 0;
-      if (index >= totalSlides) index = totalSlides - 1;
-      
-      slides[currentSlide].classList.remove('active');
-      currentSlide = index;
-      slides[currentSlide].classList.add('active');
-      
-      // 更新指示器
-      document.querySelectorAll('.indicator').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-      
-      // 更新进度条
-      progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
-      
-      // 更新导航高亮
-      document.querySelectorAll('.nav-link').forEach((link, i) => {
-        link.classList.toggle('active', i === currentSlide);
-      });
-      
-      // 如果是视频页，自动播放
-      if (currentSlide === 3) {
-        const video = document.querySelector('.slide-video video');
-        if (video) video.play();
-      } else {
-        const video = document.querySelector('.slide-video video');
-        if (video) video.pause();
-      }
-    }
-    
-    // 键盘控制
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        goToSlide(currentSlide + 1);
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        e.preventDefault();
-        goToSlide(currentSlide - 1);
-      }
-    });
-    
-    // 鼠标滚轮
-    let wheelTimeout;
-    document.addEventListener('wheel', (e) => {
-      if (wheelTimeout) return;
-      wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 800);
-      
-      if (e.deltaY > 0) {
-        goToSlide(currentSlide + 1);
-      } else {
-        goToSlide(currentSlide - 1);
-      }
-    }, { passive: true });
-    
-    // 触摸滑动
-    let touchStartY = 0;
-    document.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-    });
-    document.addEventListener('touchend', (e) => {
-      const diff = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) goToSlide(currentSlide + 1);
-        else goToSlide(currentSlide - 1);
-      }
-    });
-    
-    // ===== 作品筛选与渲染 =====
-    let filteredWorks = [...works];
-    let lightboxIndex = 0;
-    
-    function renderWorks(cat = 'all') {
-      filteredWorks = cat === 'all' ? [...works] : works.filter(w => w.category === cat);
-      const grid = document.getElementById('worksGrid');
-      grid.innerHTML = '';
-      
-      filteredWorks.forEach((work, i) => {
-        const card = document.createElement('div');
-        card.className = 'work-card' + (work.type === 'video' ? ' work-card-video' : '');
-        card.innerHTML = work.type === 'video' 
-          ? '<video src="' + work.src + '" muted preload="metadata"></video>'
-          : '<img src="' + work.src + '" alt="' + work.title + '" loading="lazy">';
-        
-        card.innerHTML += '<div class="work-card-overlay"><div class="work-card-title">' + work.title + '</div><div class="work-card-cat">' + work.category + '</div></div>';
-        
-        card.onclick = () => openLightbox(i);
-        grid.appendChild(card);
-      });
-    }
-    
-    // 筛选按钮
-    document.querySelectorAll('.works-tab').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.works-tab').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderWorks(btn.dataset.cat);
-      };
-    });
-    
-    renderWorks();
-    
-    // ===== Lightbox =====
-    function openLightbox(index) {
-      lightboxIndex = index;
-      updateLightbox();
-      document.getElementById('lightbox').classList.add('active');
-    }
-    
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('active');
-    }
-    
-    function lightboxNav(dir) {
-      lightboxIndex = (lightboxIndex + dir + filteredWorks.length) % filteredWorks.length;
-      updateLightbox();
-    }
-    
-    function updateLightbox() {
-      const work = filteredWorks[lightboxIndex];
-      const media = document.getElementById('lightboxMedia');
-      const info = document.getElementById('lightboxInfo');
-      
-      if (work.type === 'video') {
-        media.innerHTML = '<video src="' + work.src + '" controls autoplay style="max-width:90vw;max-height:80vh;border-radius:8px"></video>';
-      } else {
-        media.innerHTML = '<img src="' + work.src + '" alt="' + work.title + '" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px">';
-      }
-      info.textContent = (lightboxIndex + 1) + ' / ' + filteredWorks.length + '  |  ' + work.title;
-    }
-    
-    // Lightbox 键盘
-    document.addEventListener('keydown', (e) => {
-      if (!document.getElementById('lightbox').classList.contains('active')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') lightboxNav(-1);
-      if (e.key === 'ArrowRight') lightboxNav(1);
-    });
-    
-    document.getElementById('lightbox').onclick = (e) => {
-      if (e.target.id === 'lightbox') closeLightbox();
+    const products = {
+      slipper: { name: "小拖鞋 · 钩织挂件", price: null, image: "assets/product-slippers.jpg" },
+      starfish: { name: "海星 · 钩织橡皮筋", price: null, image: "assets/product-starfish.jpg" },
+      monstera: { name: "龟背竹 · 钩织挂件", price: null, image: "assets/product-monstera.jpg" }
     };
-    
-    // 初始化进度条
-    progressBar.style.width = (100 / totalSlides) + '%';
+    const articles = [
+      { title: "给小拖鞋挑一组撞色", paragraphs: ["红色配白色，蓝色配黄色，再加上一组灰白色。小拖鞋挂件用熟悉的夏日配色，做成可以挂在包上的迷你模样。", "不同配色有不同的感觉：明亮、活泼，或安静耐看。喜欢哪一双，可以先放进购物袋；具体售价和颜色库存确认后会在这里更新。"] },
+      { title: "把一颗小海星戴在发间", paragraphs: ["这款海星橡皮筋用奶油黄和橘黄色做出柔软的层次，像把一小片温暖的海边颜色带在身边。", "扎头发时是一个醒目的小装饰，收起来时也像一颗可爱的小星星。商品尺寸、材料和售价待补充确认。"] },
+      { title: "让一片龟背竹陪你出门", paragraphs: ["从熟悉的叶片轮廓得到灵感，做成灰绿色的钩织挂件。柔和的颜色适合挂在钥匙、包袋或喜欢的小角落。", "每件手作的细节会带一点自己的纹理。商品尺寸、材料、售价和库存确认后，会继续补上更完整的信息。"] }
+    ];
+    let cart = JSON.parse(localStorage.getItem("aendo-cart") || "{}");
+    const countEl = document.querySelector("#cart-count");
+    const cartItemsEl = document.querySelector("#cart-items");
+    const totalEl = document.querySelector("#cart-total");
+    const drawer = document.querySelector("#cart-drawer");
+    const overlay = document.querySelector("#overlay");
+    const toast = document.querySelector("#toast");
+    let toastTimer;
+    function money(value) { return `¥ ${value.toFixed(0)}`; }
+    function saveCart() { localStorage.setItem("aendo-cart", JSON.stringify(cart)); renderCart(); }
+    function renderCart() {
+      const entries = Object.entries(cart).filter(([id, qty]) => products[id] && qty > 0);
+      const count = entries.reduce((sum, [, qty]) => sum + qty, 0);
+      const hasPrice = entries.length && entries.every(([id]) => Number.isFinite(products[id].price));
+      const total = hasPrice ? entries.reduce((sum, [id, qty]) => sum + products[id].price * qty, 0) : null;
+      countEl.textContent = count;
+      totalEl.textContent = total === null ? "待确认" : money(total);
+      cartItemsEl.innerHTML = entries.length ? entries.map(([id, qty]) => {
+        const p = products[id];
+        return `<div class="cart-item"><img src="${p.image}" alt=""><div><h3>${p.name}</h3><small>价格待确认</small><div class="qty"><button type="button" data-qty="${id}" data-delta="-1" aria-label="减少${p.name}数量">−</button><span>${qty}</span><button type="button" data-qty="${id}" data-delta="1" aria-label="增加${p.name}数量">+</button></div></div><button class="remove-item" type="button" data-remove="${id}" aria-label="移除${p.name}">×</button></div>`;
+      }).join("") : `<div class="empty-cart">购物袋还是空的。<br>去小店看看喜欢什么吧。</div>`;
+    }
+    function showToast(message) { toast.textContent = message; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("show"), 1800); }
+    function openCart() { drawer.classList.add("open"); overlay.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden"; document.querySelector("#close-cart").focus(); }
+    function closeCart() { drawer.classList.remove("open"); overlay.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); document.body.style.overflow = ""; }
+    document.querySelectorAll("[data-add]").forEach(button => button.addEventListener("click", () => { const id = button.dataset.add; cart[id] = (cart[id] || 0) + 1; saveCart(); showToast("已放进购物袋 · 价格仅供示意"); }));
+    cartItemsEl.addEventListener("click", event => { const qty = event.target.closest("[data-qty]"); const remove = event.target.closest("[data-remove]"); if (qty) { const id = qty.dataset.qty; cart[id] = Math.max(0, (cart[id] || 0) + Number(qty.dataset.delta)); if (!cart[id]) delete cart[id]; saveCart(); } if (remove) { delete cart[remove.dataset.remove]; saveCart(); } });
+    document.querySelector("#open-cart").addEventListener("click", openCart);
+    document.querySelector("#close-cart").addEventListener("click", closeCart);
+    overlay.addEventListener("click", closeCart);
+    document.addEventListener("keydown", event => { if (event.key === "Escape") { closeCart(); closeArticle(); } });
+    document.querySelectorAll(".category-chip").forEach(chip => chip.addEventListener("click", () => { document.querySelectorAll(".category-chip").forEach(item => item.classList.remove("active")); chip.classList.add("active"); const category = chip.textContent; document.querySelectorAll(".product-card").forEach(card => { const isHair = card.dataset.product === "starfish"; card.hidden = category === "发饰小物" ? !isHair : category === "钩织挂件" ? isHair : false; }); }));
+    const nav = document.querySelector("#site-nav");
+    document.querySelector("#menu-button").addEventListener("click", event => { const open = nav.classList.toggle("open"); event.currentTarget.setAttribute("aria-expanded", String(open)); });
+    nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => { nav.classList.remove("open"); document.querySelector("#menu-button").setAttribute("aria-expanded", "false"); }));
+    const articleModal = document.querySelector("#article-modal");
+    function closeArticle() { articleModal.classList.remove("open"); }
+    function openArticle(card) { const article = articles[Number(card.dataset.article)]; document.querySelector("#article-title").textContent = article.title; document.querySelector("#article-body").innerHTML = article.paragraphs.map(text => `<p>${text}</p>`).join(""); articleModal.classList.add("open"); document.querySelector("#close-article").focus(); }
+    document.querySelectorAll("[data-article]").forEach(card => { card.addEventListener("click", () => openArticle(card)); card.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openArticle(card); } }); });
+    document.querySelector("#close-article").addEventListener("click", closeArticle);
+    articleModal.addEventListener("click", event => { if (event.target === articleModal) closeArticle(); });
+    renderCart();
   </script>
 </body>
 </html>
